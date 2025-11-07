@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriPal Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00FF7F", // Vibrant Green
+                        "secondary": "#00BFFF", // Deep Sky Blue
+                        "background-light": "#F5F5DC", // Old light theme bg, keeping for reference
+                        "background-dark": "#1A1A2E", // Deep Navy
+                        "card-dark": "#162447", // Slightly lighter navy/charcoal for cards
+                        "border-dark": "#00FF7F",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'glow-primary': '0 0 8px rgba(0, 255, 127, 0.4)',
+                        'glow-secondary': '0 0 8px rgba(0, 191, 255, 0.4)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+        .text-glow {
+            text-shadow: 0 0 8px rgba(0, 255, 127, 0.6);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-dark text-gray-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center py-5 sm:px-4 md:px-10 lg:px-20 xl:px-40">
+<div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark/20 px-4 sm:px-6 lg:px-10 py-3">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary text-glow">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"></path>
+</g>
+<defs>
+<clipPath id="clip0_6_319">
+<rect fill="white" height="48" width="48"></rect>
+</clipPath>
+</defs>
+</svg>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">AgriPal</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<div class="flex items-center gap-9">
+<a class="text-primary text-glow text-sm font-bold leading-normal" href="#">Dashboard</a>
+<a class="text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal" href="#">Sensors</a>
+<a class="text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal" href="#">Alerts</a>
+<a class="text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-black/20 text-gray-200 hover:bg-black/30">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/50" data-alt="Profile picture of Farmer John" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwZQOxph8NxyePREnefJvbBqwE6OH_5Ofntwwbav3r1SsLTwD8FybKKPpo14oxd2BIjHmQUYKIuX8LwVj6FFjizo3qc1wHGP-2br7uNScxmExmr8PJET-6nUkiiJreLkPOprsK8sJZOMMG2XlZarSw0Ihpq8tEL_2FjCmEU2A0J42Z2GaRPLQgo2W3QXtJkAWNY0yur2v0duLMkPMEILIFJ5eCYIz45k41qcYAwkrZURt3GNimstdcGPDJTHe1Usa8EdQ90cjb5xs");'></div>
+</div>
+</header>
+<main class="flex-1 p-4 sm:p-6 lg:p-8">
+<div class="flex flex-wrap justify-between gap-4 items-center mb-8">
+<p class="text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Welcome, Farmer John!</p>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-card-dark hover:bg-black/30 border border-border-dark/30 rounded-lg text-white">
+<span class="material-symbols-outlined text-lg text-primary">grid_view</span> Grid View
+                                </button>
+<button class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-transparent hover:bg-black/30 border border-transparent rounded-lg text-gray-400 hover:text-white">
+<span class="material-symbols-outlined text-lg">map</span> Map View
+                                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2">
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-5">Soil Patch Status</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+<div class="flex flex-col gap-4 p-4 bg-card-dark rounded-xl border border-border-dark/20 shadow-glow-primary">
+<div class="flex justify-between items-start">
+<p class="text-white text-base font-bold leading-normal">Maize Valley</p>
+<span class="material-symbols-outlined text-primary text-2xl text-glow">eco</span>
+</div>
+<div class="text-center">
+<p class="text-4xl font-bold text-white">65%</p>
+<p class="text-sm text-gray-400">Soil Moisture</p>
+</div>
+<div class="bg-primary/10 p-3 rounded-lg text-sm text-center text-primary">
+<p>Irrigation complete 2h ago</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-card-dark rounded-xl border border-yellow-400/20 shadow-lg" style="--tw-shadow-color: rgba(251, 191, 36, 0.4); --tw-shadow: var(--tw-shadow-colored);">
+<div class="flex justify-between items-start">
+<p class="text-white text-base font-bold leading-normal">Sunny Loam</p>
+<span class="material-symbols-outlined text-yellow-400 text-2xl" style="text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);">warning</span>
+</div>
+<div class="text-center">
+<p class="text-4xl font-bold text-white">35%</p>
+<p class="text-sm text-gray-400">Soil Moisture</p>
+</div>
+<div class="bg-yellow-400/10 p-3 rounded-lg text-sm text-center text-yellow-300">
+<p>Needs watering soon</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-card-dark rounded-xl border border-red-500/20 shadow-lg" style="--tw-shadow-color: rgba(239, 68, 68, 0.4); --tw-shadow: var(--tw-shadow-colored);">
+<div class="flex justify-between items-start">
+<p class="text-white text-base font-bold leading-normal">West Field</p>
+<span class="material-symbols-outlined text-red-500 text-2xl" style="text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);">priority_high</span>
+</div>
+<div class="text-center">
+<p class="text-4xl font-bold text-white">21%</p>
+<p class="text-sm text-gray-400">Soil Moisture</p>
+</div>
+<div class="bg-red-500/10 p-3 rounded-lg text-sm text-center text-red-300">
+<p>Critical: Immediate watering</p>
+</div>
+</div>
+</div>
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-8">Farm-wide Environmental Trends</h2>
+<div class="bg-card-dark rounded-xl border border-border-dark/20 shadow-glow-primary p-4">
+<div class="flex border-b border-border-dark/20 mb-4">
+<button class="px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary text-glow">Soil Moisture</button>
+<button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-primary border-b-2 border-transparent">Temperature</button>
+<button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-primary border-b-2 border-transparent">Humidity</button>
+</div>
+<div class="w-full h-64 bg-center bg-no-repeat bg-contain" data-alt="A line chart showing soil moisture trends over the last 24 hours. The line fluctuates but shows a general upward trend after a dip, indicating recent irrigation. X-axis is time, Y-axis is percentage." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9ZtQvkcEPVxploX7yO4z_M23yCuiM4Fz57pomoAIdSQiep6TCEIl6v9Bbsdi-eQ2dbNqJjiL6kCDNaFENenzyzClmv2AbGepbcAGDFH6jeOp-9dmi63k9oOzzFzndKAAglFi-ry_wI1Rm5BHGY-rFkmcqKCB6K-AfPTvKPDM95yV05am9gz6aveI_Wwo58v_TEYwXL9RlhomLBzz_QFFXpXv3Jx1QAiuenS0pkJuo-c38fW7f96gvZOTUPNX9wZHkaO2Ttq1CfJQ');"></div>
+</div>
+</div>
+<div class="lg:col-span-1">
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-5">Today's Irrigation Recommendations</h2>
+<div class="flex flex-col gap-4 p-6 bg-secondary/10 rounded-xl border border-secondary/40 shadow-glow-secondary">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-3xl" style="text-shadow: 0 0 8px rgba(0, 191, 255, 0.6);">api</span>
+<h3 class="text-lg font-bold text-secondary">NASA API Insights</h3>
+</div>
+<p class="text-gray-100">Precipitation expected in 3 hours. No irrigation needed for <strong class="text-secondary">Sunny Loam</strong> today.</p>
+<div class="mt-2 flex items-center gap-2 text-sm text-secondary/80">
+<span class="material-symbols-outlined text-base">cloud</span>
+<span>80% chance of rain</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

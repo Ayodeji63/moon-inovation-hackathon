@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriPal - Alerts History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#49ec13",
+              "background-light": "#f6f8f6",
+              "background-dark": "#152210",
+              "urgent": "#DC3545",
+              "caution": "#FFC107",
+              "info": "#007BFF"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-[#131811] dark:text-gray-200">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="sticky top-0 h-screen w-64 flex-shrink-0 bg-white dark:bg-[#1C2C18] p-4 hidden lg:flex flex-col">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="AgriPal brand logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfNFB4xd9GszKJW67m-8mtbP6UuqG_aetWwANGyvLEjBZNRptCRp5ilt29lV9SgGoYVEwP9RVUrYePnN9NnVMuj8vMJqrp85ZpYjDaQXYZ0mWqE3bDw7-YQIOAXtQDGQgt5MEFQvhDqMyIvo98GFBNtVrDX0xFWQyVa-z0BfiDGGfmVs3yHyDQB5-BzkCO0EF0i8txe1akse90XrRUDtyP7nDfEEQxlLnz0_SuNN0PfLW63KtnU53uTkzlFKmtGVk7yrXC0ZlWL4o");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#131811] dark:text-gray-100 text-base font-medium leading-normal">AgriPal</h1>
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Smart Agriculture System</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">grass</span>
+<p class="text-sm font-medium leading-normal">Soil Patches</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<p class="text-sm font-medium leading-normal">Irrigation Schedule</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-full bg-primary/20 dark:bg-primary/30 text-[#131811] dark:text-white" href="#">
+<span class="material-symbols-outlined fill">notifications_active</span>
+<p class="text-sm font-medium leading-normal">Alerts History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<p class="text-sm font-medium leading-normal">Reports</p>
+</a>
+</nav>
+</div>
+<div class="mt-auto flex flex-col gap-4">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-[#131811] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90">
+<span class="truncate">New Irrigation Cycle</span>
+</button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#131811] dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 rounded-full" href="#">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium leading-normal">Logout</p>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-4 sm:p-6 lg:p-10">
+<div class="max-w-4xl mx-auto">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between gap-3 mb-6">
+<h1 class="text-[#131811] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Alerts &amp; Notifications History</h1>
+</div>
+<!-- Filters -->
+<div class="bg-white dark:bg-[#1C2C18] p-4 rounded-lg mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<button class="flex w-full items-center justify-between gap-x-2 rounded-full h-10 px-4 bg-background-light dark:bg-background-dark text-[#131811] dark:text-gray-200 text-sm font-medium leading-normal hover:bg-gray-200 dark:hover:bg-gray-700">
+<span>Soil Patch Name</span>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</button>
+<button class="flex w-full items-center justify-between gap-x-2 rounded-full h-10 px-4 bg-background-light dark:bg-background-dark text-[#131811] dark:text-gray-200 text-sm font-medium leading-normal hover:bg-gray-200 dark:hover:bg-gray-700">
+<span>Alert Type</span>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</button>
+<button class="flex w-full items-center justify-between gap-x-2 rounded-full h-10 px-4 bg-background-light dark:bg-background-dark text-[#131811] dark:text-gray-200 text-sm font-medium leading-normal hover:bg-gray-200 dark:hover:bg-gray-700">
+<span>Date Range</span>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</button>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-[#131811] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90">
+<span class="truncate">Apply Filters</span>
+</button>
+</div>
+</div>
+<!-- Alert List -->
+<div class="flex flex-col gap-3">
+<!-- Urgent Alert Item -->
+<div class="flex gap-4 bg-white dark:bg-[#1C2C18] p-4 rounded-lg border-l-4 border-urgent">
+<div class="flex items-center justify-center rounded-lg bg-urgent/10 text-urgent shrink-0 size-12">
+<span class="material-symbols-outlined">thermostat</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#131811] dark:text-gray-100 text-base font-medium leading-normal"><strong>Greenhouse 3:</strong> Heads up! The temperature has exceeded the optimal range.</p>
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Alert Type: High Temperature</p>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Oct 26, 2023, 08:15 AM</p>
+</div>
+</div>
+<!-- Caution Alert Item -->
+<div class="flex gap-4 bg-white dark:bg-[#1C2C18] p-4 rounded-lg border-l-4 border-caution">
+<div class="flex items-center justify-center rounded-lg bg-caution/10 text-caution shrink-0 size-12">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#131811] dark:text-gray-100 text-base font-medium leading-normal"><strong>Patch Alpha:</strong> Soil moisture dropped to 15%. It's getting too dry.</p>
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Alert Type: Too Dry</p>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Oct 25, 2023, 02:30 PM</p>
+</div>
+</div>
+<!-- Informational Alert Item -->
+<div class="flex gap-4 bg-white dark:bg-[#1C2C18] p-4 rounded-lg border-l-4 border-info">
+<div class="flex items-center justify-center rounded-lg bg-info/10 text-info shrink-0 size-12">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#131811] dark:text-gray-100 text-base font-medium leading-normal"><strong>Section Gamma:</strong> Scheduled irrigation cycle completed successfully.</p>
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Alert Type: Irrigation Complete</p>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Oct 24, 2023, 10:00 AM</p>
+</div>
+</div>
+<!-- Caution Alert Item -->
+<div class="flex gap-4 bg-white dark:bg-[#1C2C18] p-4 rounded-lg border-l-4 border-caution">
+<div class="flex items-center justify-center rounded-lg bg-caution/10 text-caution shrink-0 size-12">
+<span class="material-symbols-outlined">humidity_high</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#131811] dark:text-gray-100 text-base font-medium leading-normal"><strong>Patch Beta:</strong> Moisture levels are at 85%. Risk of overwatering.</p>
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Alert Type: Too Wet</p>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-[#6b8961] dark:text-green-400/80 text-sm font-normal leading-normal">Oct 23, 2023, 05:45 PM</p>
+</div>
+</div>
+<!-- Empty State Example (commented out) -->
+<!-- 
+                    <div class="flex flex-col items-center justify-center gap-4 text-center bg-white dark:bg-[#1C2C18] p-10 rounded-lg">
+                        <span class="material-symbols-outlined text-5xl text-gray-400 dark:text-gray-500">search_off</span>
+                        <h3 class="text-xl font-bold text-[#131811] dark:text-gray-200">No Alerts Found</h3>
+                        <p class="text-[#6b8961] dark:text-green-400/80 max-w-xs">There are no alerts matching your current filters. Try adjusting your search criteria.</p>
+                    </div>
+                    -->
+</div>
+</div>
+</main>
+</div>
+</body></html>

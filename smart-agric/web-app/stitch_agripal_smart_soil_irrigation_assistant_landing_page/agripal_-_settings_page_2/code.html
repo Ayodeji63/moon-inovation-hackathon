@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriPal - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#00f5a0",
+              "primary-focus": "#00ffaa",
+              "background-light": "#f6f8f6",
+              "background-dark": "#0a1014",
+              "card-light": "#ffffff",
+              "card-dark": "#161c22",
+              "text-light": "#131811",
+              "text-dark": "#e0e6eb",
+              "text-muted-light": "#6b8961",
+              "text-muted-dark": "#7b8a97",
+              "border-light": "#f1f4f0",
+              "border-dark": "#2a333c",
+              "destructive": "#ef4444"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+            boxShadow: {
+                "glow-primary": "0 0 15px rgba(0, 245, 160, 0.3)",
+                "glow-primary-md": "0 0 25px rgba(0, 245, 160, 0.4)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24
+      }
+      .glowing-icon {
+        color: #00f5a0;
+        text-shadow: 0 0 8px rgba(0, 245, 160, 0.7);
+      }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-text-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-10 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 sm:px-10 lg:px-20 py-3 bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center gap-4 text-text-dark">
+<div class="size-6 text-primary">
+<svg class="drop-shadow-[0_0_8px_rgba(0,245,160,0.7)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_6_319)"><path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path></g><defs><clipPath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clipPath></defs></svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">AgriPal</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<div class="flex items-center gap-9">
+<a class="text-text-muted-dark hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-text-muted-dark hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Soil Patches</a>
+<a class="text-text-muted-dark hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Irrigation</a>
+<a class="text-text-dark hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-card-dark text-text-muted-dark hover:bg-border-dark hover:text-text-dark transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-card-dark text-text-muted-dark hover:bg-border-dark hover:text-text-dark transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="ml-2 bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCn9BHIflU8O1KQ6GLgBSoUYKWCk72QlYXP4rzwQn_DGFgGSHdEqze0naqscmnqDdZv8Mhjt9gsnx8v-L5hqQ0ynDioGvWWJOPdXZZnlCreaon4eIaMMrzgKYv2niDuVtQXqd4Gouj3szSKCGPFBj6GKUhbuaTGUeqWdujH7JYbddDCFHh7Nl2n8d9p2y8NzB4GXLI6c-7tjlcn5aXUW9mN1bhT1I32qRHJhHlO5TdeWUyFn-hzkeBhPVhPn0aDAW6s2d5vacPxPfU");'></div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+<div class="layout-content-container flex flex-col w-full max-w-4xl flex-1 gap-8">
+<div class="flex flex-wrap justify-between gap-3 items-center">
+<h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-white">Settings</h1>
+</div>
+<div class="flex flex-col gap-6 rounded-xl bg-card-dark border border-border-dark p-6">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex flex-col">
+<h3 class="text-xl font-bold leading-tight tracking-[-0.015em] text-white">Manage Soil Patches</h3>
+<p class="text-text-muted-dark text-sm">Add, edit, or remove your sensor-equipped soil patches.</p>
+</div>
+<button class="flex items-center justify-center gap-2 w-full sm:w-auto h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal rounded-lg hover:bg-primary-focus transition-colors shadow-glow-primary">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Add New Patch</span>
+</button>
+</div>
+<div class="flex flex-col divide-y divide-border-dark border-t border-border-dark">
+<div class="flex items-center gap-4 px-4 py-3 justify-between hover:bg-border-dark/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-lg bg-border-dark shrink-0 size-12">
+<span class="material-symbols-outlined glowing-icon">grass</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium leading-normal line-clamp-1 text-text-dark">Maize Valley</p>
+<p class="text-text-muted-dark text-sm font-normal leading-normal line-clamp-2">Sensor ID: AGP-SENSOR-001</p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-2">
+<button class="flex items-center justify-center w-16 h-8 text-sm font-medium leading-normal rounded-md text-text-muted-dark hover:bg-border-dark hover:text-text-dark transition-colors">Edit</button>
+<button class="flex items-center justify-center w-20 h-8 text-sm font-medium leading-normal rounded-md text-destructive hover:bg-destructive/10 transition-colors">Remove</button>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 justify-between hover:bg-border-dark/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-lg bg-border-dark shrink-0 size-12">
+<span class="material-symbols-outlined glowing-icon">grass</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium leading-normal line-clamp-1 text-text-dark">North Field - Corn</p>
+<p class="text-text-muted-dark text-sm font-normal leading-normal line-clamp-2">Sensor ID: AGP-SENSOR-004</p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-2">
+<button class="flex items-center justify-center w-16 h-8 text-sm font-medium leading-normal rounded-md text-text-muted-dark hover:bg-border-dark hover:text-text-dark transition-colors">Edit</button>
+<button class="flex items-center justify-center w-20 h-8 text-sm font-medium leading-normal rounded-md text-destructive hover:bg-destructive/10 transition-colors">Remove</button>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 justify-between hover:bg-border-dark/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-lg bg-border-dark shrink-0 size-12">
+<span class="material-symbols-outlined glowing-icon">grass</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium leading-normal line-clamp-1 text-text-dark">Sunflower Ridge</p>
+<p class="text-text-muted-dark text-sm font-normal leading-normal line-clamp-2">Sensor ID: AGP-SENSOR-007</p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-2">
+<button class="flex items-center justify-center w-16 h-8 text-sm font-medium leading-normal rounded-md text-text-muted-dark hover:bg-border-dark hover:text-text-dark transition-colors">Edit</button>
+<button class="flex items-center justify-center w-20 h-8 text-sm font-medium leading-normal rounded-md text-destructive hover:bg-destructive/10 transition-colors">Remove</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6 rounded-xl bg-card-dark border border-border-dark p-6">
+<div class="flex flex-col">
+<h3 class="text-xl font-bold leading-tight tracking-[-0.015em] text-white">Account Information</h3>
+<p class="text-text-muted-dark text-sm">Update your personal and farm details.</p>
+</div>
+<form class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1 text-text-muted-dark" for="fullName">Full Name</label>
+<input class="w-full h-10 px-3 text-sm rounded-md bg-background-dark border border-border-dark text-text-dark placeholder-text-muted-dark focus:ring-2 focus:ring-primary/50 focus:border-primary/50" id="fullName" type="text" value="John Farmer"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1 text-text-muted-dark" for="email">Email Address</label>
+<input class="w-full h-10 px-3 text-sm rounded-md bg-background-dark border border-border-dark text-text-dark placeholder-text-muted-dark focus:ring-2 focus:ring-primary/50 focus:border-primary/50" id="email" type="email" value="john.farmer@agripal.com"/>
+</div>
+<div class="sm:col-span-2">
+<label class="block text-sm font-medium mb-1 text-text-muted-dark" for="farmName">Farm Name</label>
+<input class="w-full h-10 px-3 text-sm rounded-md bg-background-dark border border-border-dark text-text-dark placeholder-text-muted-dark focus:ring-2 focus:ring-primary/50 focus:border-primary/50" id="farmName" type="text" value="Green Valley Farms"/>
+</div>
+</form>
+<div class="flex justify-end pt-2 border-t border-border-dark">
+<button class="flex items-center justify-center h-10 px-6 bg-primary text-background-dark text-sm font-bold leading-normal rounded-lg hover:bg-primary-focus transition-colors shadow-glow-primary">Save Changes</button>
+</div>
+</div>
+<div class="flex flex-col gap-6 rounded-xl bg-card-dark border border-border-dark p-6">
+<div class="flex flex-col">
+<h3 class="text-xl font-bold leading-tight tracking-[-0.015em] text-white">Notification Preferences</h3>
+<p class="text-text-muted-dark text-sm">Choose how you receive important alerts.</p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center p-4 rounded-lg bg-background-dark">
+<div>
+<p class="font-medium text-text-dark">Email Alerts</p>
+<p class="text-text-muted-dark text-sm">Receive alerts for irrigation and soil moisture via email.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-border-dark peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex justify-between items-center p-4 rounded-lg bg-background-dark">
+<div>
+<p class="font-medium text-text-dark">SMS Alerts</p>
+<p class="text-text-muted-dark text-sm">Get critical warnings sent directly to your mobile phone.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-border-dark peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>
