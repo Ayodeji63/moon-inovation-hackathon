@@ -7,6 +7,7 @@ from kivy.animation import Animation
 from kivy.graphics import Color, Rectangle, Ellipse, Line
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
+from supabase import create_client, Client
 
 import serial
 import json 
@@ -33,14 +34,91 @@ TOPIC = "agripal/farm1/sensor1"
 DEVICE_ID = "sensor_1"
 FARM_ID = "farm1"
 
+
+
 data_queue = queue.Queue()
 
 
-
+class SUPABASEPublisher:
+    """Upload to Supabase with background thread"""
+    
+    def __init__(self, url, key):
+        self.url = url
+        self.key = key
+        self.supabase = create_client(self.url, self.key)
+        self.queue = queue.Queue()
+        self.running = False
+        self.upload_thread = None
+    
+    def start(self):
+        """Start background upload thread"""
+        self.running = True
+        self.upload_thread = Thread(target=self._upload_worker, daemon=True)
+        self.upload_thread.start()
+        print("Supabase uploader started")
+    
+    def save_to_supabase(self, data):
+        """Save sensor data to Supabase in real-time"""    
+        try:
+            record = {
+                'device_id': DEVICE_ID,
+                'farm_id': FARM_ID,
+                'timestamp': datetime.now().isoformat(),
+                'raw_value': data['raw'],
+                'moisture': data['moisture'],
+                'temperature': data['temperature'],
+                'humidity': data['humidity'],
+                'status': data['status']
+            }
+            
+            self.queue.put(record)
+        except Exception as e:
+            print(f"Supabase error: {e}")
+    
+    def _upload_worker(self):
+        """Background worker that uploads batches"""
+        batch = []
+        while self.running:
+            try:
+                timeout = time.time() + 30
+                while len(batch) < 20 and time.time() < timeout:
+                    try:
+                        record = self.queue.get(timeout=1)
+                        batch.append(record)
+                    except queue.Empty:
+                        continue
+                
+                if batch:
+                    self.supabase.table('sensor_readings').insert(batch).execute()
+                    print(f"Uploaded {len(batch)} records")
+                    batch = []
+            
+            except Exception as e:
+                print(f"Upload error: {e}")
+                time.sleep(5)
+    
+    def stop(self):
+        """Stop uploader and flush remaining data"""
+        self.running = False
+        
+        remaining = []
+        while not self.queue.empty():
+            try:
+                remaining.append(self.queue.get_nowait())
+            except queue.Empty:
+                break
+        
+        if remaining:
+            try:
+                self.supabase.table('sensor_readings').insert(remaining).execute()
+                print(f"Flished {len(remaining)} records")
+            except Exception as e:
+                print(f"Final flush failed: {e}")
+                        
 class MQTTPublisher:
     """Seperate class to manage MQTT connection"""
     def __init__(self):
-        self.clien = None
+        self.client = None
         self.connected = False
         self.setup_client()
     
@@ -220,17 +298,36 @@ def read_sensor_data(ser):
         print("Error reading from serial:", e)
         return None
 
+# def save_to_csv(data):
+#     """Save data to CSV file for logging"""
+#     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+#     try:
+#         with open('sensor_log.csv', 'a') as f:
+#             f.write(f"{timestamp},{data['raw']},{data['moisture']},{data['temperature']},{data['humidity']},{data['status']}\n")
+#     except Exception as e:
+#         print(f"❌ Error saving to CSV: {e}")
+
 def save_to_csv(data):
-    """Save data to CSV file for logging"""
+    """Save data as JSON to file"""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     try:
-        with open('sensor_log.csv', 'a') as f:
-            f.write(f"{timestamp},{data['raw']},{data['moisture']},{data['temperature']},{data['humidity']},{data['status']}\n")
+        log_entry = {
+            'timestamp': timestamp,
+            'raw': data['raw'],
+            'moisture': data['moisture'],
+            'temperature': data.get('temperature', 0),
+            'humidity': data.get('humidity', 0),
+            'status': data['status']
+        }
+        
+        with open('sensor_log.jsonl', 'a') as f:
+            f.write(json.dumps(log_entry) + '\n')
+        
     except Exception as e:
-        print(f"❌ Error saving to CSV: {e}")
-
-
+        print(f"Error saving: {e}")
+        
 class AnimatedFace(Widget):
     moisture_level = NumericProperty(50)
     
@@ -653,6 +750,8 @@ class SmartAgricDashboard(FloatLayout):
         # Initialize MQTT and Serial
         self.mqtt_publisher = MQTTPublisher()
         self.serial_reader = SerialReader(SERIAL_PORT, BAUD_RATE)
+        self.supabase = SUPABASEPublisher(SUPABASE_URL, SUPABASE_KEY)
+        self.supabase.start()
         
         # Full screen face
         self.face = AnimatedFace(
@@ -765,6 +864,7 @@ class SmartAgricDashboard(FloatLayout):
                 
                 # Publish to MQTT
                 self.mqtt_publisher.publish(temperature, humidity, moisture)
+                self.supabase.save_to_supabase(data)
                 
                 # Save to CSV
                 save_to_csv(data)
@@ -782,6 +882,7 @@ class SmartAgricDashboard(FloatLayout):
         """Cleanup when app closes"""
         self.serial_reader.stop()
         self.mqtt_publisher.disconnect()
+        self.supabase.stop()
             
                     
 
