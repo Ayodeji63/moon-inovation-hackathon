@@ -8,6 +8,228 @@ from kivy.graphics import Color, Rectangle, Ellipse, Line
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
 
+import serial
+import json 
+import time
+from datetime import datetime
+import paho.mqtt.client as mqtt
+import json
+import time
+import random
+from threading import Thread
+import queue
+
+SERIAL_PORT = '/dev/ttyUSB0'
+BAUD_RATE = 9600
+
+# MQTT Configuration
+BROKER = "f3150d0d05ce46d0873bf1a69c56ff38.s1.eu.hivemq.cloud"  # e.g., HiveMQ Cloud URL
+PORT = 8883  # Use 8883 for TLS, 1883 for non-TLS
+USERNAME = "Ayodeji"
+PASSWORD = "cand4f694a@A"
+TOPIC = "agripal/farm1/sensor1"
+
+#Device Info
+DEVICE_ID = "sensor_1"
+FARM_ID = "farm1"
+
+data_queue = queue.Queue()
+
+
+
+class MQTTPublisher:
+    """Seperate class to manage MQTT connection"""
+    def __init__(self):
+        self.clien = None
+        self.connected = False
+        self.setup_client()
+    
+    def setup_client(self):
+        """Initialize MQTT client with proper callbacks"""
+        self.client = mqtt.Client(
+            client_id=f"raspberry_pi_{DEVICE_ID}",
+            callback_api_version = mqtt.CallbackAPIVersion.VERSION2,
+            protocol=mqtt.MQTTv5
+        ) 
+        
+        self.client.username_pw_set(USERNAME, PASSWORD)
+        self.client.tls_set()
+        
+        self.client.on_connect = self.on_connect
+        self.client.on_disconnect = self.on_disconnect
+        self.client.on_publish = self.on_publish
+
+    def on_connect(self, client, userdata, flags, reason_code, properties):
+        """Callback when connected"""
+        if reason_code == 0:
+            print("Connected to MQTT Broker")
+            self.connected = True
+        else:
+            print(f"Failed to connect, return code {reason_code}")
+            self.connected = False
+    
+    def on_disconnect(self, client, userdata, flags, reason_code, properties):
+        """Callback when disconnected"""
+        print(f"Disconnected from MQTT Broker (code: {reason_code})")
+        self.connected = False
+    
+    def on_publish(self, client, userdata, mid, reason_code, properties):
+        """Callback when message is published"""
+        print(f"Message {mid} published")
+    
+    def connect(self):
+        """Connect to MQTT broker"""
+        try:
+            self.client.connect(BROKER, PORT, keepalive=60)
+            self.client.loop_start()
+            
+            timeout = 5
+            start_time = time.time()
+            while not self.connected and (time.time() - start_time) < timeout:
+                time.sleep(0.1)
+            
+            return self.connected
+        except Exception as e:
+            print(f"Connection error: {e}")
+            return False
+    
+    def publish(self, temperature, humidity, moisture):
+        """Publish sensor data to MQTT"""
+        if not self.connected:
+            print("Not connected to MQTT broker")
+            return False
+        
+        try:
+            sensor_data = {
+                "device_id": DEVICE_ID,
+                "farm_id": FARM_ID,
+                "timestamp": int(time.time()),
+                "soil_moisture": float(moisture),
+                "temperature": float(temperature),
+                "humidity": float(humidity),
+                "ph_level": 7.0,
+                "nitrogen": 100.0
+            }
+            
+            payload = json.dumps(sensor_data)
+            result = self.client.publish(TOPIC, payload, qos=1)
+            
+            if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                print(f"Published M:{moisture}% T:{temperature}C H:{humidity}%")
+                return True
+            else:
+                print(f"Publish failed with code: {result.rc}")
+                return False
+        
+        except Exception as e:
+            print(f"Failed to publish sensor data: {e}")
+            return False
+    
+    def disconnect(self):
+        """Disconnect from MQTT broker"""
+        if self.client:
+            self.client.loop_stop()
+            self.client.disconnect()
+            self.connected = False
+            print("Disconnected from MQTT")      
+
+class SerialReader:
+    """Separate class to handle serial communication"""
+    
+    def __init__(self, port, baudrate):
+        self.port = port
+        self.baudrate = baudrate
+        self.serial = None
+        self.running = False
+    
+    def connect(self):
+        """Connect to serial port"""
+        try:
+            self.serial = serial.Serial(self.port, self.baudrate, timeout=2)
+            time.sleep(2)  # Wait for Arduino to initialize
+            self.serial.flushInput()
+            print(f"✅ Connected to serial port: {self.port}")
+            return True
+        except serial.SerialException as e:
+            print(f"❌ Could not connect to {self.port}: {e}")
+            return False
+    
+    def read_data(self):
+        """Read and parse JSON data from Arduino"""
+        try:
+            line = self.serial.readline().decode("utf-8").strip()
+            
+            if not line.startswith('{'):
+                return None
+            
+            data = json.loads(line)
+            return data
+        
+        except json.JSONDecodeError as e:
+            print(f"❌ JSON decode error: {e}")
+            return None
+        except UnicodeDecodeError:
+            return None
+        except Exception as e:
+            print(f"❌ Error reading from serial: {e}")
+            return None
+    
+    def start_reading(self, data_queue):
+        """Start reading in a separate thread"""
+        self.running = True
+        
+        def read_loop():
+            while self.running:
+                data = self.read_data()
+                if data:
+                    data_queue.put(data)
+                time.sleep(0.1)
+        
+        thread = Thread(target=read_loop, daemon=True)
+        thread.start()
+    
+    def stop(self):
+        """Stop reading and close serial port"""
+        self.running = False
+        if self.serial:
+            self.serial.close()
+            print("👋 Serial port closed")
+      
+
+def read_sensor_data(ser):
+    """Read and parse JSON data from Arduino"""
+    
+    try:
+        # Read one line from serial
+        line = ser.readline().decode("utf-8").strip()
+        
+        # Skip non-JSON lines (startup messages, etc.)
+        if not line.startswith('{'):
+            return None
+        
+        # parse JSON data
+        data = json.loads(line)
+        return data
+    
+    except json.JSONDecodeError:
+        print("Failed to decode JSON:", line)
+        return None
+    except UnicodeDecodeError:
+        return None
+    except Exception as e:
+        print("Error reading from serial:", e)
+        return None
+
+def save_to_csv(data):
+    """Save data to CSV file for logging"""
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    try:
+        with open('sensor_log.csv', 'a') as f:
+            f.write(f"{timestamp},{data['raw']},{data['moisture']},{data['temperature']},{data['humidity']},{data['status']}\n")
+    except Exception as e:
+        print(f"❌ Error saving to CSV: {e}")
+
 
 class AnimatedFace(Widget):
     moisture_level = NumericProperty(50)
@@ -290,7 +512,7 @@ class AnimatedFace(Widget):
     
     def animate_background_color(self, target_color):
         """Animate the background color change"""
-        anim = Animation(rgba=target_color, duration=1)
+        anim = Animation(rgba=target_color, duration=0.5)
         anim.start(self.bg_color)
     
     def draw_happy_eyebrows(self, center_x, center_y):
@@ -428,6 +650,10 @@ class SmartAgricDashboard(FloatLayout):
         
         self.plant_name = "Tommy"
         
+        # Initialize MQTT and Serial
+        self.mqtt_publisher = MQTTPublisher()
+        self.serial_reader = SerialReader(SERIAL_PORT, BAUD_RATE)
+        
         # Full screen face
         self.face = AnimatedFace(
             size_hint=(1, 1),
@@ -500,26 +726,79 @@ class SmartAgricDashboard(FloatLayout):
         self.add_widget(self.moisture_label)
         
         # Start simulation
-        Clock.schedule_interval(self.simulate_sensor_update, 5)
+        # Clock.schedule_interval(self.simulate_sensor_update, 5)
+        
+        # Connect to MQTT
+        Clock.schedule_once(self.initialize_connections, 1)
+        
+        Clock.schedule_interval(self.check_sensor_data, 0.5)
     
-    def simulate_sensor_update(self, dt):
-        import random
+    def initialize_connections(self, dt):
+        """Initialize MQTT and Serial connections"""
+        # connect to MQTT
+        if self.mqtt_publisher.connect():
+            print("MQTT ready")
+        else:
+            print("MQTT connection failed")
         
-        moisture = random.randint(20, 95)
-        temp = random.randint(18, 30)
-        humidity = random.randint(40, 80)
-        
-        self.face.animate_to_level(moisture)
-        
-        self.moisture_label.text = str(moisture) + '%'
-        self.temp_value.text = str(temp) + 'C'
-        self.humidity_value.text = str(humidity) + '%'
+        # Connect to Serial and start reading
+        if self.serial_reader.connect():
+            self.serial_reader.start_reading(data_queue)
+            print("Serial reader started")
+        else:
+          print("Serial connection failed")
+    
+    def check_sensor_data(self, dt):
+        """Check queue for new sensor data (non-blocking)"""
+        try:
+            data = data_queue.get_nowait()
+            
+            if data:
+                moisture = data.get('moisture', 0)
+                temperature = data.get('temperature', 0)
+                humidity = data.get('humidity', 0)
+                
+                self.face.animate_to_level(moisture)
+                self.moisture_label.text = f"{moisture}%"
+                self.temp_value.text = f"{temperature}°C"
+                self.humidity_value.text = f"{humidity}%"
+                
+                # Publish to MQTT
+                self.mqtt_publisher.publish(temperature, humidity, moisture)
+                
+                # Save to CSV
+                save_to_csv(data)
+                
+                # Log
+                timestamp = datetime.now().strftime('%H:%M:%S')
+                print(f"[{timestamp}] Moisture: {moisture}% | Temp: {temperature}°C | Humidity: {humidity}%")
+            
+        except queue.Empty:
+            pass
+        except Exception as e:
+            print(f"Error processing sensor data: {e}")
+    
+    def on_stop(self):
+        """Cleanup when app closes"""
+        self.serial_reader.stop()
+        self.mqtt_publisher.disconnect()
+            
+                    
 
 
 class SmartAgricApp(App):
     def build(self):
         return SmartAgricDashboard()
 
+    def on_stop(self):
+        """Called when app is closing"""
+        self.dashboard.on_stop()
+        return True
 
 if __name__ == '__main__':
-    SmartAgricApp().run()
+    try:
+        SmartAgricApp().run()
+    except KeyboardInterrupt:
+        print("\n Shutting down....")
+    
+    
